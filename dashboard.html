@@ -3,11 +3,11 @@
   <head>
     <base target="_top">
     <title>Business Dashboard</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons|Material+Icons+Outlined" rel="stylesheet">
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
-    <link rel="stylesheet" href="style.css"> <!-- We will create this file later -->
      <style>
       @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
       :root { --primary-color: #4f46e5; --secondary-color: #10b981; --background-color: #f3f4f6; --card-background: #ffffff; --text-color: #111827; --subtext-color: #6b7280; --sidebar-bg: #1f2937; --sidebar-text: #d1d5db; --sidebar-active-bg: #374151; --sidebar-active-border: #4f46e5; --shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06); --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06); }
@@ -64,41 +64,6 @@
       .filter-bar label { font-weight: 500; }
       .filter-bar select, .filter-bar .multi-select { padding: 8px 12px; border-radius: 6px; border: 1px solid #ccc; font-family: 'Inter', sans-serif; background-color: #fff; }
       .chart-container { position: relative; height: 300px; width: 100%; }
-      .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.5); z-index: 1000; display: none; justify-content: center; align-items: center; }
-      .modal-content { background: #fff; padding: 32px; border-radius: 12px; width: 90%; max-width: 800px; max-height: 90vh; display: flex; flex-direction: column; }
-      .modal-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px; }
-      .modal-header h2 { font-size: 1.5rem; }
-      .modal-close { font-size: 2rem; font-weight: bold; cursor: pointer; color: #aaa; background: none; border: none; }
-      .modal-body { overflow-y: auto; }
-      .modal-filters { display: flex; gap: 16px; margin-bottom: 16px; align-items: center; flex-wrap: wrap; }
-      .modal-filters label { font-weight: 500; }
-      .modal-filters input[type="date"], .modal-filters select { padding: 8px; border-radius: 6px; border: 1px solid #ccc; font-family: 'Inter', sans-serif; }
-      .dept-card { background-color: #f9fafb; border: 1px solid #e5e7eb; border-radius: 8px; padding: 16px; }
-      .dept-card h4 { margin-bottom: 12px; font-weight: 600; font-size: 1rem; }
-      .employee-list { list-style: none; }
-      .employee-list li { display: flex; align-items: center; padding: 10px 0; border-top: 1px solid #e5e7eb; }
-      .employee-list li:first-child { border-top: none; }
-      .employee-name { font-weight: 500; }
-      .employee-status { margin-left: auto; padding: 4px 10px; border-radius: 999px; font-size: 0.75rem; font-weight: 600; text-transform: capitalize; }
-      .status-present { background-color: #dcfce7; color: #166534; }
-      .status-absent { background-color: #fee2e2; color: #991b1b; }
-      .status-leave { background-color: #dbeafe; color: #1e40af; }
-      .status-halfday { background-color: #fef3c7; color: #92400e; }
-      .advanced-filter-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 24px; }
-      .filter-group { display: flex; flex-direction: column; }
-      .filter-group label { font-weight: 500; margin-bottom: 8px; }
-      .filter-group select { width: 100%; }
-      .filter-group .checkbox-group { display: flex; flex-direction: column; gap: 8px; }
-      .filter-buttons { grid-column: 1 / -1; display: flex; gap: 16px; justify-content: flex-end; }
-      .btn { padding: 10px 20px; border-radius: 8px; border: none; cursor: pointer; font-weight: 500; transition: background-color 0.2s; }
-      .btn-primary { background-color: var(--primary-color); color: #fff; }
-      .btn-primary:hover { background-color: #4338ca; }
-      .btn-secondary { background-color: #e5e7eb; color: var(--text-color); }
-      .btn-secondary:hover { background-color: #d1d5db; }
-      .btn-export { background-color: #059669; color: white; }
-      .btn-export:hover { background-color: #047857; }
-      .table-header-controls { display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem; }
-      .table-header-controls h3 { margin: 0; }
       #preloader { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(255, 255, 255, 0.8); z-index: 9999; display: flex; justify-content: center; align-items: center; transition: opacity 0.3s ease, visibility 0.3s ease; }
       #preloader.hidden { opacity: 0; visibility: hidden; }
       .spinner { width: 50px; height: 50px; border: 5px solid #f3f3f3; border-top: 5px solid var(--primary-color); border-radius: 50%; animation: spin 1s linear infinite; }
@@ -126,7 +91,7 @@
     <div class="container">
       <nav class="sidebar" id="sidebar">
         <div>
-          <div class="sidebar-header"><h3>MyCorp</h3></div>
+          <div class="sidebar-header"><h3>Dashboard</h3></div>
           <ul class="nav-links">
             <li><a href="dashboard.html?page=Backoffice"><i class="material-icons-outlined">workspaces</i> Backoffice</a></li>
             <li><a href="dashboard.html?page=Marketing"><i class="material-icons-outlined">campaign</i> Marketing</a></li>
@@ -139,7 +104,7 @@
           <ul class="nav-links" style="margin-top:0; flex-grow: 0;">
              <li><a href="#" id="logout-btn"><i class="material-icons-outlined">logout</i> Logout</a></li>
           </ul>
-          Dashboard v9.0
+          Dashboard v9.1
         </div>
       </nav>
 
@@ -147,12 +112,10 @@
         <header class="main-header">
           <button class="menu-toggle" id="menu-toggle"><i class="material-icons-outlined">menu</i></button>
           <h1 id="page-title">Dashboard</h1>
-          <div id="last-updated" style="display: none;"><i class="material-icons-outlined">sync</i><span></span></div>
         </header>
         
-        <!-- This div will be populated by script.js based on the page -->
         <div id="page-content">
-            <!-- SKELETON LOADER OR CONTENT WILL BE INJECTED HERE -->
+            <!-- Content will be injected here by script.js -->
         </div>
         
       </main>
