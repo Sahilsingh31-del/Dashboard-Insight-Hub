@@ -2,7 +2,7 @@
 // SCRIPT CONFIGURATION
 // =================================================================================
 // ▼▼▼ YAHAN APNA NAYA APPS SCRIPT API URL PASTE KAREIN ▼▼▼
-const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbylRPanAgVT5gSN4ylewkdACSyn1yRtsEF30wDn2B0J4oFWAgb-xTcESWIUjH2X7JSROQ/exec";
+const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbyKTxFbL2Mxv9oEBCkhdx8tAtGRqdIUr505ey9Vc0y_8hLVXnMfKqgKJvqyABwxQy9tRg/exec";
 // ▲▲▲ YAHAN APNA NAYA APPS SCRIPT API URL PASTE KAREIN ▲▲▲
 // =================================================================================
 
@@ -496,3 +496,4 @@ function timeAgo(isoString) {
     const days = Math.round(hours / 24);
     return `${days} day(s) ago`;
 }
+
