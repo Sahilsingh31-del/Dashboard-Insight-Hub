@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <base target="_top">
+    <title>Admin Login</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons|Material+Icons+Outlined" rel="stylesheet">
+    <style>
+        :root { --primary-color: #4f46e5; --text-color: #111827; --subtext-color: #6b7280; }
+        html, body { height: 100%; width: 100%; margin: 0; padding: 0; font-family: 'Inter', sans-serif; overflow: hidden; }
+        * { box-sizing: border-box; }
+        .background { position: absolute; top: 0; left: 0; right: 0; bottom: 0; }
+        .blue-purple { background: linear-gradient(to right, #1D2B64, #F8CDDA); animation: fadeInOut 25s ease forwards infinite; }
+        .green-blue { background: linear-gradient(to right, #43cea2, #185a9d); animation: fadeOutIn 25s ease forwards infinite; }
+        @keyframes fadeInOut { 0% { opacity: 0; } 50% { opacity: 1; } 100% { opacity: 0; } }
+        @keyframes fadeOutIn { 0% { opacity: 1; } 50% { opacity: 0; } 100% { opacity: 1; } }
+        .login-container { position: fixed; top: 0; left: 0; width: 100%; height: 100%; display: flex; justify-content: center; align-items: center; z-index: 10; }
+        .login-card { background: rgba(255, 255, 255, 0.25); backdrop-filter: blur(15px); -webkit-backdrop-filter: blur(15px); border: 1px solid rgba(255, 255, 255, 0.18); box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37); padding: 40px; border-radius: 16px; width: 100%; max-width: 400px; text-align: center; }
+        .login-header { margin-bottom: 32px; display: flex; flex-direction: column; align-items: center; }
+        .logo-img { width: 80%; max-width: 200px; margin-bottom: 24px; }
+        .login-header h2 { font-size: 1.5rem; font-weight: 600; color: var(--text-color); margin: 0; }
+        .input-group { position: relative; margin-bottom: 20px; }
+        .input-group .material-icons-outlined { position: absolute; left: 15px; top: 50%; transform: translateY(-50%); color: var(--subtext-color); transition: color 0.2s; z-index: 1; }
+        .input-field { width: 100%; padding: 15px 15px 15px 50px; border: 1px solid rgba(255, 255, 255, 0.4); border-radius: 8px; font-size: 1rem; font-family: 'Inter', sans-serif; background-color: rgba(255, 255, 255, 0.5); color: #333; transition: all 0.3s ease; }
+        .input-field::placeholder { color: #6b7280; }
+        .input-field:focus { outline: none; border-color: var(--primary-color); box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.3); background-color: rgba(255, 255, 255, 0.9); }
+        .input-field:focus ~ .material-icons-outlined { color: var(--primary-color); }
+        .btn-login { width: 100%; padding: 15px; border-radius: 8px; border: none; background-color: var(--primary-color); color: #fff; font-size: 1rem; font-weight: 600; cursor: pointer; transition: all 0.3s ease; position: relative; overflow: hidden; }
+        .btn-login:hover { background-color: #4338ca; transform: translateY(-3px); box-shadow: 0 4px 15px rgba(0,0,0,0.2); }
+        .btn-login::before { content: ''; position: absolute; top: 0; left: -100%; width: 100%; height: 100%; background: linear-gradient(120deg, transparent, rgba(255, 255, 255, 0.4), transparent); transition: none; }
+        .btn-login:hover::before { left: 100%; transition: all 0.7s; }
+        .btn-login:disabled { background-color: #9ca3af; cursor: not-allowed; transform: none; box-shadow: none; }
+        #error-message { color: #b91c1c; background-color: rgba(254, 226, 226, 0.8); border-radius: 6px; padding: 10px; margin-top: 15px; font-weight: 500; display: none; }
+        .credits { position: absolute; bottom: 15px; width: 100%; text-align: center; font-size: 0.8rem; color: rgba(255, 255, 255, 0.7); text-shadow: 0 1px 2px rgba(0,0,0,0.2); }
+    </style>
+</head>
+<body>
+    <div class="background blue-purple"></div>
+    <div class="background green-blue"></div>
+
+    <div class="login-container">
+        <div class="login-card">
+            <div class="login-header">
+                <img src="https://static.wixstatic.com/media/32a229_ba7f8c3692e248f8889eb7c955141236~mv2.png" alt="AKS Valuers Logo" class="logo-img">
+                <h2>Admin Login</h2>
+            </div>
+            <form id="login-form">
+                <div class="input-group">
+                    <input type="text" id="username" class="input-field" placeholder="Username" required>
+                    <i class="material-icons-outlined">person</i>
+                </div>
+                <div class="input-group">
+                    <input type="password" id="password" class="input-field" placeholder="Password" required>
+                    <i class="material-icons-outlined">lock</i>
+                </div>
+                <button type="submit" id="login-button" class="btn-login">Login</button>
+                <p id="error-message"></p>
+            </form>
+        </div>
+    </div>
+    
+    <div class="credits">
+        <p>Developed by Sahil | AKS Valuers</p>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
