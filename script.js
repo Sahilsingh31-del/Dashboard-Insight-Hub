@@ -1,18 +1,19 @@
 // =================================================================================
 // SCRIPT CONFIGURATION
 // =================================================================================
-// ▼▼▼ YAHAN APNA APPS SCRIPT API URL PASTE KAREIN ▼▼▼
-const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbyk9Z6npLcjnO9otz3hfw6oPiC7VyXvTLNOXxmQwZB-IXUnbtok9HSy8VDNtgA9PJn5NQ/exec";
-// ▲▲▲ YAHAN APNA APPS SCRIPT API URL PASTE KAREIN ▲▲▲
+// ▼▼▼ YAHAN APNA NAYA APPS SCRIPT API URL PASTE KAREIN ▼▼▼
+const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbytQdO9sCyJ7ENzvlYZSYddN9rD8gB0D_kxTpwdBao2ScJ6Yg0w-GZ5dyccYbe0UwMsog/exec";
+// ▲▲▲ YAHAN APNA NAYA APPS SCRIPT API URL PASTE KAREIN ▲▲▲
 // =================================================================================
 
 
 document.addEventListener('DOMContentLoaded', function() {
     const path = window.location.pathname;
+    const pageName = path.split("/").pop();
 
-    if (path.includes('index.html') || path.endsWith('/')) {
+    if (pageName === 'index.html' || pageName === '') {
         handleLoginPage();
-    } else if (path.includes('dashboard.html')) {
+    } else if (pageName === 'dashboard.html') {
         handleDashboardPage();
     }
 });
