@@ -2,7 +2,7 @@
 // SCRIPT CONFIGURATION
 // =================================================================================
 // ▼▼▼ YAHAN APNA NAYA APPS SCRIPT API URL PASTE KAREIN ▼▼▼
-const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbytQdO9sCyJ7ENzvlYZSYddN9rD8gB0D_kxTpwdBao2ScJ6Yg0w-GZ5dyccYbe0UwMsog/exec";
+const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbylRPanAgVT5gSN4ylewkdACSyn1yRtsEF30wDn2B0J4oFWAgb-xTcESWIUjH2X7JSROQ/exec";
 // ▲▲▲ YAHAN APNA NAYA APPS SCRIPT API URL PASTE KAREIN ▲▲▲
 // =================================================================================
 
@@ -11,7 +11,7 @@ document.addEventListener('DOMContentLoaded', function() {
     const path = window.location.pathname;
     const pageName = path.split("/").pop();
 
-    if (pageName === 'index.html' || pageName === '') {
+    if (pageName === 'index.html' || pageName === '' || !pageName.includes('.html')) {
         handleLoginPage();
     } else if (pageName === 'dashboard.html') {
         handleDashboardPage();
@@ -56,7 +56,8 @@ function handleLoginPage() {
                     }
                 })
                 .catch(error => {
-                    errorMessage.textContent = 'An error occurred: ' + error.message;
+                    errorMessage.textContent = 'An error occurred. Please check the console.';
+                    console.error('Login Error:', error);
                     errorMessage.style.display = 'block';
                     loginButton.disabled = false;
                     loginButton.textContent = 'Login';
@@ -70,12 +71,12 @@ function handleLoginPage() {
 // =================================================================================
 function handleDashboardPage() {
     if (sessionStorage.getItem('isLoggedIn') !== 'true') {
-        window.location.href = 'index.html'; // Redirect to index.html
+        window.location.href = 'index.html';
         return;
     }
 
     const preloader = document.getElementById('preloader');
-    preloader.classList.remove('hidden'); // Show preloader while content loads
+    preloader.classList.remove('hidden');
 
     const sidebar = document.getElementById('sidebar');
     const menuToggle = document.getElementById('menu-toggle');
@@ -85,7 +86,7 @@ function handleDashboardPage() {
     logoutBtn.addEventListener('click', (e) => {
         e.preventDefault();
         sessionStorage.removeItem('isLoggedIn');
-        window.location.href = 'index.html'; // Redirect to index.html
+        window.location.href = 'index.html';
     });
 
     const params = new URLSearchParams(window.location.search);
@@ -100,7 +101,7 @@ function handleDashboardPage() {
     document.getElementById('page-title').textContent = `${currentPage} Dashboard`;
 
     const pageContent = document.getElementById('page-content');
-    pageContent.innerHTML = '<div class="skeleton skeleton-card"></div><div class="skeleton skeleton-card"></div>'; // Basic skeleton
+    pageContent.innerHTML = '<div class="skeleton skeleton-card"></div><div class="skeleton skeleton-card"></div>';
 
     switch (currentPage) {
         case 'Backoffice':
@@ -128,18 +129,11 @@ function loadBackofficePage(container) {
     fetch(`${SCRIPT_URL}?action=getBackofficeData`)
         .then(res => res.json())
         .then(data => {
+            if (data.error) throw new Error(data.error);
             let html = `
                 <div class="card" style="margin-bottom: 24px;">
                     <h3 style="margin-bottom: 16px; font-weight: 600;">Today's Work Breakdown</h3>
                     <div class="chart-container"><canvas id="summary-chart"></canvas></div>
-                </div>
-                <div class="filter-bar">
-                    <label for="source-filter">Show Data For:</label>
-                    <select id="source-filter">
-                        <option value="Both">Both (AKS & ICS)</option>
-                        <option value="AKS">AKS Only</option>
-                        <option value="ICS">ICS Only</option>
-                    </select>
                 </div>
                 <div id="backoffice-dashboard" class="grid-container-large">`;
 
@@ -164,7 +158,6 @@ function loadBackofficePage(container) {
             html += `</div>`;
             container.innerHTML = html;
 
-            // Render Chart
             const ctx = document.getElementById('summary-chart').getContext('2d');
             new Chart(ctx, {
                 type: 'doughnut',
@@ -181,7 +174,8 @@ function loadBackofficePage(container) {
             });
         })
         .catch(err => {
-            container.innerHTML = `<div class="card">Error loading data: ${err.message}</div>`;
+            container.innerHTML = `<div class="card"><h3>Error Loading Data</h3><p>${err.message}</p><p>Please check the API URL in script.js and ensure the Apps Script is deployed correctly with access for "Anyone".</p></div>`;
+            console.error("Backoffice Error:", err);
         });
 }
 
@@ -189,6 +183,7 @@ function loadMarketingPage(container) {
     fetch(`${SCRIPT_URL}?action=getMarketingData`)
         .then(res => res.json())
         .then(data => {
+            if (data.error) throw new Error(data.error);
             let leaderboardHtml = '';
             data.leaderboard.forEach((p, index) => {
                 leaderboardHtml += `
@@ -265,12 +260,11 @@ function loadMarketingPage(container) {
                     </div>
                 </div>`;
             container.innerHTML = html;
-            
-            // Now that HTML is in the DOM, initialize map and fetch visits
             initializeMarketingMap();
         })
         .catch(err => {
-            container.innerHTML = `<div class="card">Error loading data: ${err.message}</div>`;
+            container.innerHTML = `<div class="card"><h3>Error Loading Data</h3><p>${err.message}</p></div>`;
+            console.error("Marketing Error:", err);
         });
 }
 
@@ -297,6 +291,7 @@ function initializeMarketingMap() {
         fetch(url)
             .then(res => res.json())
             .then(visits => {
+                if (visits.error) throw new Error(visits.error);
                 if (visits && visits.length > 0) {
                     const bounds = [];
                     let visitLogHtml = '';
@@ -335,12 +330,13 @@ function initializeMarketingMap() {
             .catch(err => {
                 visitLogBody.innerHTML = `<tr><td colspan="3" style="text-align:center;">Error: ${err.message}</td></tr>`;
                 mapLoader.style.display = 'none';
+                 console.error("Map Error:", err);
             });
     }
 
     personFilter.addEventListener('change', fetchAndDisplayVisits);
     periodFilter.addEventListener('change', fetchAndDisplayVisits);
-    fetchAndDisplayVisits(); // Initial fetch
+    fetchAndDisplayVisits();
 }
 
 
@@ -348,6 +344,7 @@ function loadEngineersPage(container) {
     fetch(`${SCRIPT_URL}?action=getEngineersData`)
         .then(res => res.json())
         .then(data => {
+            if (data.error) throw new Error(data.error);
             let engineersHtml = '';
             data.engineers.forEach(eng => {
                 engineersHtml += `
@@ -368,7 +365,7 @@ function loadEngineersPage(container) {
             container.innerHTML = `
                 <div id="engineers-dashboard">
                     <div class="card">
-                        <div class="card-header"><div class="card-title"><i class="material-icons-outlined">groups</i><h3>Engineers Performance</h3></div></div>
+                        <div class="card-title"><i class="material-icons-outlined">groups</i><h3>Engineers Performance</h3></div>
                         <div class="table-container">
                             <table class="styled-table">
                                 <thead><tr><th>Engineer</th><th>Today's Visits</th><th>Monthly Visits</th><th>Avg. Review</th></tr></thead>
@@ -379,16 +376,16 @@ function loadEngineersPage(container) {
                 </div>`;
         })
         .catch(err => {
-            container.innerHTML = `<div class="card">Error loading data: ${err.message}</div>`;
+            container.innerHTML = `<div class="card"><h3>Error Loading Data</h3><p>${err.message}</p></div>`;
+            console.error("Engineers Error:", err);
         });
 }
 
 function loadAccountsPage(container) {
-    // Accounts page is complex, we will just load the default view for now
-    // Advanced filtering would require more complex state management
      fetch(`${SCRIPT_URL}?action=getAccountsData`)
         .then(res => res.json())
         .then(data => {
+            if (data.error) throw new Error(data.error);
             const summary = data.summary;
             const lists = data.lists;
 
@@ -411,7 +408,7 @@ function loadAccountsPage(container) {
 
             container.innerHTML = `
                 <div id="accounts-dashboard">
-                    <div class="grid-container accounts-grid" style="grid-template-columns: repeat(4, 1fr);">
+                    <div class="grid-container accounts-grid" style="grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));">
                         <div class="card"><div class="card-title"><i class="material-icons-outlined" style="color: #ef4444; background-color: #fee2e2;">arrow_upward</i><h3>Total Debit</h3></div><p class="card-value" style="color: #b91c1c;">₹${summary.totalDebit.toLocaleString('en-IN')}</p></div>
                         <div class="card"><div class="card-title"><i class="material-icons-outlined" style="color: #16a34a; background-color: #dcfce7;">arrow_downward</i><h3>Total Credit</h3></div><p class="card-value" style="color: #15803d;">₹${summary.totalCredit.toLocaleString('en-IN')}</p></div>
                         <div class="card"><div class="card-title"><i class="material-icons-outlined" style="color: #f97316; background-color: #ffedd5;">hourglass_empty</i><h3>Total Pending</h3></div><p class="card-value" style="color: #c2410c;">₹${summary.totalPending.toLocaleString('en-IN')}</p></div>
@@ -430,7 +427,8 @@ function loadAccountsPage(container) {
                 </div>`;
         })
         .catch(err => {
-            container.innerHTML = `<div class="card">Error loading data: ${err.message}</div>`;
+            container.innerHTML = `<div class="card"><h3>Error Loading Data</h3><p>${err.message}</p></div>`;
+            console.error("Accounts Error:", err);
         });
 }
 
@@ -438,6 +436,7 @@ function loadHrPage(container) {
      fetch(`${SCRIPT_URL}?action=getHrData`)
         .then(res => res.json())
         .then(data => {
+            if (data.error) throw new Error(data.error);
             const summary = data.summary;
             let byDeptHtml = '';
             for (let dept in data.byDept) {
@@ -474,7 +473,8 @@ function loadHrPage(container) {
                 </div>`;
         })
         .catch(err => {
-            container.innerHTML = `<div class="card">Error loading data: ${err.message}</div>`;
+            container.innerHTML = `<div class="card"><h3>Error Loading Data</h3><p>${err.message}</p></div>`;
+            console.error("HR Error:", err);
         });
 }
 
